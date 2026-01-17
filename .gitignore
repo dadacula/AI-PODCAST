@@ -1,0 +1,39 @@
+# node_modules
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# Production
+build/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor folders and files
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Supabase and Env
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+supabase/.temp/
+
+# Antigravity artifacts
+.gemini/
+brain/
+walkthrough.md
+task.md
+implementation_plan.md

@@ -1,0 +1,11 @@
+/* Base styles */
+:root {
+  --primary: #473c53;
+  --accent-gold: #A38C6F;
+}
+
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

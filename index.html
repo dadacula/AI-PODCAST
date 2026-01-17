@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curated Edition</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap" rel="stylesheet">
+    
+    <!-- Material Symbols -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#473c53",
+                        "primary-dark": "#362d40",
+                        "primary-light": "#6d5e7d",
+                        "background-light": "#fbfaf9",
+                        "background-dark": "#211e25",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#2d2a33",
+                        "accent-gold": "#A38C6F",
+                    },
+                    fontFamily: {
+                        "display": ["Newsreader", "serif"],
+                        "sans": ["Manrope", "sans-serif"],
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "3xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(71, 60, 83, 0.08)',
+                        'paper': "0 4px 12px -2px rgba(71, 60, 83, 0.08), 0 2px 6px -1px rgba(71, 60, 83, 0.04)",
+                        'floating': '0 10px 40px -10px rgba(0, 0, 0, 0.15)',
+                    }
+                },
+            },
+        }
+    </script>
+
+    <style>
+        body {
+            /* Better mobile touch feeling */
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        .icon-filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        /* Hide scrollbar */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .drop-cap:first-letter {
+            float: left;
+            font-size: 3.5rem;
+            line-height: 0.8;
+            padding-right: 0.5rem;
+            padding-top: 0.25rem;
+            font-weight: 700;
+            color: #473c53;
+        }
+        .dark .drop-cap:first-letter {
+            color: #aeb6bf; 
+        }
+
+        .glass-nav {
+            background: rgba(251, 250, 249, 0.85);
+            backdrop-filter: blur(12px);
+        }
+        .dark .glass-nav {
+            background: rgba(33, 30, 37, 0.85);
+        }
+    </style>
+
+<link rel="stylesheet" href="/index.css">
+</head>
+<body class="bg-[#f0f2f5] dark:bg-black">
+    <div id="root"></div>
+<script type="module" src="/index.tsx"></script>
+</body>
+</html>
