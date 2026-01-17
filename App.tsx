@@ -50,22 +50,23 @@ const AppContent: React.FC = () => {
     }
   }, [preferences.isDarkMode]);
 
-  // Fetch articles
-  useEffect(() => {
-    const loadNews = async () => {
-      setIsLoading(true);
-      try {
-        const fetchedArticles = await fetchNews();
-        if (fetchedArticles.length > 0) {
-          setArticles(fetchedArticles);
-        } else {
-          setArticles(ARTICLES);
-        }
-      } catch (err) {
+  const loadNews = async () => {
+    setIsLoading(true);
+    try {
+      const fetchedArticles = await fetchNews();
+      if (fetchedArticles.length > 0) {
+        setArticles(fetchedArticles);
+      } else {
         setArticles(ARTICLES);
       }
-      setIsLoading(false);
-    };
+    } catch (err) {
+      setArticles(ARTICLES);
+    }
+    setIsLoading(false);
+  };
+
+  // Fetch articles on mount
+  useEffect(() => {
     loadNews();
   }, []);
 
@@ -129,6 +130,7 @@ const AppContent: React.FC = () => {
             isLoading={isLoading}
             isSaved={isArticleSaved}
             onToggleSave={toggleSave}
+            onRefresh={loadNews}
           />
         )}
 

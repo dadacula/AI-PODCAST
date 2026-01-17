@@ -11,6 +11,7 @@ interface HomeProps {
   isLoading?: boolean;
   isSaved?: (id: string) => boolean;
   onToggleSave?: (id: string) => void;
+  onRefresh?: () => void;
 }
 
 const Home: React.FC<HomeProps> = ({
@@ -21,7 +22,8 @@ const Home: React.FC<HomeProps> = ({
   isOverlay = false,
   isLoading = false,
   isSaved = (_id: string) => false,
-  onToggleSave = (_id: string) => { }
+  onToggleSave = (_id: string) => { },
+  onRefresh = () => { }
 }) => {
   const [showMiniPlayer, setShowMiniPlayer] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -71,8 +73,8 @@ const Home: React.FC<HomeProps> = ({
   const displayArticles = sortedArticles.length > 0 ? sortedArticles : [];
   const isLive = articles.length > 0 && articles[0].source.includes('BBC');
 
-  const heroArticles = displayArticles.slice(0, 2);
-  const feedArticles = displayArticles.slice(2, 8);
+  const heroArticles = displayArticles.slice(0, 5);
+  const feedArticles = displayArticles.slice(5, 11);
 
   // Trending article: pick a random one from the remaining articles (after index 8) 
   // or just the next one available, to avoid it always being the same fixed index
@@ -105,12 +107,21 @@ const Home: React.FC<HomeProps> = ({
             </div>
           )}
         </div>
-        <button
-          onClick={() => navigate('settings')}
-          className="h-9 w-9 rounded-full bg-primary/10 dark:bg-white/10 flex items-center justify-center overflow-hidden ring-1 ring-primary/5 dark:ring-white/10 active:scale-95 transition-transform"
-        >
-          <img alt="User Profile" className="h-full w-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjsJIVuw8GuQTC7_-zKLJdgZ8ex3RsyqELoGkiI8WVsfmzPX-YGN5Z1HJ0hDqV4JDb6MFhGmjN8YkC7_wL42-z-6uB-lj_yG-FgSmK4M6CGtWucZRkQmiFT5gHrPp6c4QuVomjnTRvJthrOJ8nI5KUTw8UjCQobjDgsi4rTGvG_AELV32TDXgdB48xR_u5PJJF3iNXqYLaKkybtYqHSdp96UHLvc9EA1XqBmftnNxzivpSQXHBA2C2QXOoVNfquPoeMxcbmgDQ09Q" />
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={onRefresh}
+            className="h-9 w-9 rounded-xl bg-primary/5 dark:bg-white/5 flex items-center justify-center text-primary/60 dark:text-white/60 active:scale-95 transition-transform"
+            title="Refresh News"
+          >
+            <span className="material-symbols-outlined text-[20px]">refresh</span>
+          </button>
+          <button
+            onClick={() => navigate('settings')}
+            className="h-9 w-9 rounded-full bg-primary/10 dark:bg-white/10 flex items-center justify-center overflow-hidden ring-1 ring-primary/5 dark:ring-white/10 active:scale-95 transition-transform"
+          >
+            <img alt="User Profile" className="h-full w-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjsJIVuw8GuQTC7_-zKLJdgZ8ex3RsyqELoGkiI8WVsfmzPX-YGN5Z1HJ0hDqV4JDb6MFhGmjN8YkC7_wL42-z-6uB-lj_yG-FgSmK4M6CGtWucZRkQmiFT5gHrPp6c4QuVomjnTRvJthrOJ8nI5KUTw8UjCQobjDgsi4rTGvG_AELV32TDXgdB48xR_u5PJJF3iNXqYLaKkybtYqHSdp96UHLvc9EA1XqBmftnNxzivpSQXHBA2C2QXOoVNfquPoeMxcbmgDQ09Q" />
+          </button>
+        </div>
       </header>
 
       {/* Main Content */}
@@ -129,15 +140,18 @@ const Home: React.FC<HomeProps> = ({
                     className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
                     style={{ backgroundImage: `url('${article.imageUrl}')` }}
                   ></div>
-                  <div className="absolute top-4 left-4">
+                  <div className="absolute top-4 left-4 flex flex-col gap-2">
                     <span className="px-2.5 py-1 bg-surface-light/90 dark:bg-black/60 backdrop-blur-md text-accent-gold text-[10px] font-bold tracking-widest uppercase rounded font-sans border border-accent-gold/20">
+                      Top Spotlight
+                    </span>
+                    <span className="max-w-fit px-2 py-0.5 bg-primary/20 dark:bg-white/10 backdrop-blur-md text-primary dark:text-white text-[8px] font-bold tracking-widest uppercase rounded font-sans">
                       {article.category}
                     </span>
                   </div>
                   {/* Bookmark Overlay in Carousel */}
                   <button
                     onClick={(e) => { e.stopPropagation(); onToggleSave(article.id); }}
-                    className="absolute top-4 right-4 h-10 w-10 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center text-white"
+                    className="absolute top-4 right-4 h-10 w-10 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center text-white hover:bg-black/60 transition-colors"
                   >
                     <span className={`material-symbols-outlined text-[20px] ${isSaved(article.id) ? 'icon-filled text-accent-gold' : ''}`}>
                       {isSaved(article.id) ? 'bookmark' : 'bookmark_border'}
