@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Article, Screen } from '../types';
 import BottomNav from '../components/BottomNav';
+import DailySummary from '../components/DailySummary';
 
 interface HomeProps {
   navigate: (screen: Screen) => void;
@@ -126,6 +127,11 @@ const Home: React.FC<HomeProps> = ({
 
       {/* Main Content */}
       <div className="flex-1 overflow-y-auto no-scrollbar pb-32">
+        {/* Daily AI Summary */}
+        <div className="px-6 mt-6">
+          <DailySummary articles={sortedArticles} />
+        </div>
+
         {/* Carousel */}
         <div className="mt-4 pl-6 relative">
           <div className="flex gap-4 overflow-x-auto no-scrollbar pr-6 pb-4 snap-x snap-mandatory">
