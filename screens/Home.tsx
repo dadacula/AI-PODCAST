@@ -135,11 +135,13 @@ const Home: React.FC<HomeProps> = ({
                 className={`min-w-[88%] snap-center flex flex-col bg-surface-light dark:bg-surface-dark rounded-2xl shadow-soft overflow-hidden group cursor-pointer ${index === 1 ? 'opacity-90 scale-[0.98]' : ''}`}
                 onClick={() => onArticleClick(article)}
               >
-                <div className="relative h-56 w-full overflow-hidden">
-                  <div
-                    className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
-                    style={{ backgroundImage: `url('${article.imageUrl}')` }}
-                  ></div>
+                <div className="relative h-56 w-full overflow-hidden bg-gray-200 dark:bg-gray-800">
+                  <img
+                    src={article.imageUrl}
+                    alt={article.title}
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    loading="lazy"
+                  />
                   <div className="absolute top-4 left-4 flex flex-col gap-2">
                     <span className="px-2.5 py-1 bg-surface-light/90 dark:bg-black/60 backdrop-blur-md text-accent-gold text-[10px] font-bold tracking-widest uppercase rounded font-sans border border-accent-gold/20">
                       Top Spotlight
@@ -236,10 +238,14 @@ const Home: React.FC<HomeProps> = ({
                     </button>
                   </div>
                 </div>
-                <div
-                  className="w-20 h-20 shrink-0 rounded-lg bg-cover bg-center shadow-inner"
-                  style={{ backgroundImage: `url('${article.imageUrl}')` }}
-                ></div>
+                <div className="w-20 h-20 shrink-0 rounded-lg shadow-inner overflow-hidden bg-gray-200 dark:bg-gray-800">
+                  <img
+                    src={article.imageUrl}
+                    alt={article.title}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                </div>
               </div>
             </article>
           ))}

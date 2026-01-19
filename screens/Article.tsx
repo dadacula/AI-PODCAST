@@ -76,9 +76,9 @@ const ArticleScreen: React.FC<ArticleScreenProps> = ({
             let textToRead = fullContent || article.content || "";
             const completeText = `${article.title}. Published by ${article.source}. ${textToRead}`;
 
-            // Duration estimation
+            // Duration estimation (speech synthesis: ~150 words per minute)
             const wordCount = completeText.split(/\s+/).length;
-            const totalSeconds = Math.floor(wordCount / (140 / 60) / speed);
+            const totalSeconds = Math.floor((wordCount * 60) / (150 * speed));
             setTotalDurationSeconds(totalSeconds);
             const min = Math.floor(totalSeconds / 60);
             const sec = totalSeconds % 60;
@@ -217,11 +217,12 @@ const ArticleScreen: React.FC<ArticleScreenProps> = ({
             <main className="flex-1 overflow-y-auto no-scrollbar w-full pb-32" onScroll={handleScroll}>
 
                 {/* Immersive Hero Image */}
-                <div className="relative w-full h-[55vh] shrink-0">
-                    <div
-                        className="absolute inset-0 bg-cover bg-center"
-                        style={{ backgroundImage: `url('${article.imageUrl}')` }}
-                    ></div>
+                <div className="relative w-full h-[55vh] shrink-0 bg-gray-200 dark:bg-gray-900">
+                    <img
+                        src={article.imageUrl}
+                        alt={article.title}
+                        className="absolute inset-0 w-full h-full object-cover"
+                    />
                     <div className="absolute inset-0 bg-gradient-to-t from-background-light dark:from-background-dark via-transparent to-transparent"></div>
 
                     <div className="absolute bottom-0 left-0 right-0 px-6 pb-6 pt-24 bg-gradient-to-t from-background-light dark:from-background-dark via-background-light/60 dark:via-background-dark/80 to-transparent">
