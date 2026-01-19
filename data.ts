@@ -63,13 +63,14 @@ export const fetchNews = async (): Promise<Article[]> => {
 
                     // Optimize BBC image URLs for higher resolution
                     if (imageUrl && (imageUrl.includes('bbci.co.uk') || imageUrl.includes('bbc.co.uk'))) {
-                        // BBC format: .../_[id]_[title]_640x360.jpg -> request 1920x1080 (Full HD)
+                        // BBC standard sizes: 240, 464, 624, 800, 976 (width)
+                        // Request 976x549 which is reliably available on BBC CDN
                         imageUrl = imageUrl
-                            .replace(/_\d+x\d+\./g, '_1920x1080.')  // Request largest size
-                            .replace(/_\d+x\d+$/g, '_1920x1080')    // Handle URLs without extension
-                            .replace('/live/', '/production/')      // Use production quality
-                            .replace('/amz/', '/production/')       // Use production quality
-                            .replace('/test/', '/production/');     // Use production quality
+                            .replace(/_\d+x\d+\./g, '_976x549.')    // Use 976x549 (16:9 HD-ready)
+                            .replace(/_\d+x\d+$/g, '_976x549')      // Handle URLs without extension
+                            .replace(/_\d+\./, '_976.')             // Handle width-only format
+                            .replace('/cpsprodpb/', '/cpsproduction/') // Use production servers
+                            .replace('$recipe', '$recipe_976x549');  // BBC recipe parameter
                     }
 
                     // Use fallback images if no image found

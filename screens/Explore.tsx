@@ -14,40 +14,48 @@ const Explore: React.FC<ExploreProps> = ({ navigate, onTopicClick, articles }) =
   const [historyItems, setHistoryItems] = useState<string[]>(HISTORY);
   const [activeFilter, setActiveFilter] = useState<string | null>(null);
 
-  // Dynamic Trending Logic
+  // Dynamic Trending Logic - based on recent articles (last 24 hours)
   const trendingTopics = useMemo(() => {
     if (articles.length === 0) return [];
 
-    // 1. Group by Category
+    // Filter to recent articles (last 24 hours)
+    const now = Date.now();
+    const oneDayAgo = now - (24 * 60 * 60 * 1000);
+    const recentArticles = articles.filter(a => a.timestamp >= oneDayAgo);
+
+    // If no recent articles, use all articles
+    const articlesForTrending = recentArticles.length > 0 ? recentArticles : articles;
+
+    // 1. Group by Category and count
     const counts: Record<string, number> = {};
-    articles.forEach(article => {
+    articlesForTrending.forEach(article => {
         const cat = article.category;
         counts[cat] = (counts[cat] || 0) + 1;
     });
 
-    // 2. Sort by Count
+    // 2. Sort by Count (descending) and take top 4
     const sortedCategories = Object.entries(counts)
         .sort(([, a], [, b]) => b - a)
         .slice(0, 4);
 
-    // 3. Map to TrendingTopic shape
+    // 3. Map to TrendingTopic shape with realistic volume indicators
     const paths = [
-        'M0,15 Q10,18 20,10 T40,5',
-        'M0,10 L10,12 L20,8 L30,5 L40,2',
-        'M0,18 L15,15 L25,10 L40,8',
-        'M0,12 Q15,5 25,12 T40,10'
+        'M0,15 Q10,18 20,10 T40,5',        // Upward trend
+        'M0,10 L10,12 L20,8 L30,5 L40,2',  // Rising
+        'M0,18 L15,15 L25,10 L40,8',       // Climbing
+        'M0,12 Q15,5 25,12 T40,10'         // Moderate
     ];
 
     return sortedCategories.map((item, index) => {
         const [name, count] = item;
-        const total = articles.length;
-        const percentage = Math.round((count / total) * 100);
-        
+        // Calculate as number of articles in this category
+        const volumeText = `${count} ${count === 1 ? 'story' : 'stories'}`;
+
         return {
             id: index,
             rank: `#0${index + 1}`,
             name: name,
-            volume: `+${percentage}% vol`,
+            volume: volumeText,
             path: paths[index % paths.length]
         } as TrendingTopic;
     });
