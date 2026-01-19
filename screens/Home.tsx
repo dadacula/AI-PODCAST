@@ -129,7 +129,7 @@ const Home: React.FC<HomeProps> = ({
       <div className="flex-1 overflow-y-auto no-scrollbar pb-32">
         {/* Daily AI Summary */}
         <div className="px-6 mt-6">
-          <DailySummary articles={sortedArticles} />
+          <DailySummary articles={sortedArticles} onArticleClick={onArticleClick} />
         </div>
 
         {/* Carousel */}
