@@ -45,11 +45,34 @@ export const fetchNews = async (): Promise<Article[]> => {
                     const timestamp = new Date(pubDate).getTime();
                     
                     let imageUrl = '';
-                    const thumbnails = item.getElementsByTagName("media:thumbnail");
-                    if (thumbnails.length > 0) {
-                        imageUrl = thumbnails[0].getAttribute("url") || '';
+
+                    // Try to get the highest quality image available
+                    // First check media:content (often higher quality than thumbnail)
+                    const mediaContent = item.getElementsByTagName("media:content");
+                    if (mediaContent.length > 0) {
+                        imageUrl = mediaContent[0].getAttribute("url") || '';
                     }
 
+                    // Fallback to media:thumbnail if no media:content
+                    if (!imageUrl) {
+                        const thumbnails = item.getElementsByTagName("media:thumbnail");
+                        if (thumbnails.length > 0) {
+                            imageUrl = thumbnails[0].getAttribute("url") || '';
+                        }
+                    }
+
+                    // Optimize BBC image URLs for higher resolution
+                    if (imageUrl && (imageUrl.includes('bbci.co.uk') || imageUrl.includes('bbc.co.uk'))) {
+                        // BBC format: .../_[id]_[title]_640x360.jpg -> request 1920x1080 (Full HD)
+                        imageUrl = imageUrl
+                            .replace(/_\d+x\d+\./g, '_1920x1080.')  // Request largest size
+                            .replace(/_\d+x\d+$/g, '_1920x1080')    // Handle URLs without extension
+                            .replace('/live/', '/production/')      // Use production quality
+                            .replace('/amz/', '/production/')       // Use production quality
+                            .replace('/test/', '/production/');     // Use production quality
+                    }
+
+                    // Use fallback images if no image found
                     if (!imageUrl) {
                         imageUrl = FALLBACK_IMAGES[index % FALLBACK_IMAGES.length];
                     }

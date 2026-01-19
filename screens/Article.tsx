@@ -221,7 +221,8 @@ const ArticleScreen: React.FC<ArticleScreenProps> = ({
                     <img
                         src={article.imageUrl}
                         alt={article.title}
-                        className="absolute inset-0 w-full h-full object-cover"
+                        className="absolute inset-0 w-full h-full object-cover object-center"
+                        loading="eager"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-background-light dark:from-background-dark via-transparent to-transparent"></div>
 
