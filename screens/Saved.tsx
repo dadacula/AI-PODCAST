@@ -49,10 +49,14 @@ const Saved: React.FC<SavedProps> = ({ navigate, savedIds, onArticleClick, allAr
                         <span className="text-[10px] text-primary/30 dark:text-gray-600 font-sans">{article.readTime} read</span>
                     </div>
                     </div>
-                    <div 
-                        className="w-20 h-20 shrink-0 rounded-lg bg-cover bg-center shadow-inner"
-                        style={{ backgroundImage: `url('${article.imageUrl}')` }}
-                    ></div>
+                    <div className="w-20 h-20 shrink-0 rounded-lg shadow-inner overflow-hidden bg-gray-200 dark:bg-gray-800">
+                        <img
+                            src={article.imageUrl}
+                            alt={article.title}
+                            className="w-full h-full object-cover"
+                            loading="lazy"
+                        />
+                    </div>
                 </div>
                 </article>
             ))

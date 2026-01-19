@@ -44,10 +44,11 @@ const Topic: React.FC<TopicProps> = ({
         {/* Header Image/Banner */}
         <div className="relative w-full h-40 bg-primary">
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 to-transparent z-10"></div>
-          <div
-            className="absolute inset-0 bg-cover bg-center opacity-60"
-            style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuCDckfNuUz3nPrhirGAn0djRllDeXszU8UpEJatBNmJix59I9_CKpv_jtPBuJwHU1M5sp7nZ4dnBbgFBU-O49lKj653cwum1zzPcQqul0TVS0TUHoM-GclZfyq7r-TqrbfghSpZ86G712BiPgRHoUSNFF5lorYAB4DNqh40Nbd56w-LSs3nh9CBwocQCNZojObI2AWzTNlYl2cEDhGB0lu8j_iXW8yz4IHs3agg5YnjRg7O-zAIhetyCYgHsvSB8r4v_jk1-0rL5zc")' }}
-          ></div>
+          <img
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCDckfNuUz3nPrhirGAn0djRllDeXszU8UpEJatBNmJix59I9_CKpv_jtPBuJwHU1M5sp7nZ4dnBbgFBU-O49lKj653cwum1zzPcQqul0TVS0TUHoM-GclZfyq7r-TqrbfghSpZ86G712BiPgRHoUSNFF5lorYAB4DNqh40Nbd56w-LSs3nh9CBwocQCNZojObI2AWzTNlYl2cEDhGB0lu8j_iXW8yz4IHs3agg5YnjRg7O-zAIhetyCYgHsvSB8r4v_jk1-0rL5zc=w1200"
+            alt={topic}
+            className="absolute inset-0 w-full h-full object-cover opacity-60"
+          />
           <div className="absolute top-0 left-0 right-0 p-4 z-20 flex items-center justify-between">
             <button
               onClick={() => navigate('explore')}
@@ -108,10 +109,14 @@ const Topic: React.FC<TopicProps> = ({
                       </button>
                     </div>
                   </div>
-                  <div
-                    className="w-20 h-20 shrink-0 rounded-lg bg-cover bg-center shadow-inner"
-                    style={{ backgroundImage: `url('${article.imageUrl}')` }}
-                  ></div>
+                  <div className="w-20 h-20 shrink-0 rounded-lg shadow-inner overflow-hidden bg-gray-200 dark:bg-gray-800">
+                    <img
+                      src={article.imageUrl}
+                      alt={article.title}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  </div>
                 </div>
               </article>
             ))
