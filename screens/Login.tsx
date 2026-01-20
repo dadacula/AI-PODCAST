@@ -36,7 +36,9 @@ const Login: React.FC<LoginProps> = ({ navigate }) => {
                         setError(error.message);
                     }
                 } else {
-                    navigate('home');
+                    // Don't navigate manually - let App.tsx useEffect handle it
+                    // This ensures all hooks finish loading before showing home screen
+                    console.log('[Login] Sign in successful, waiting for App to handle navigation');
                 }
             } else if (mode === 'signup') {
                 const { error } = await signUp(email, password, displayName);

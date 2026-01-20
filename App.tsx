@@ -18,9 +18,9 @@ import { fetchNews, ARTICLES } from './data';
 
 const AppContent: React.FC = () => {
   const { user, loading: authLoading } = useAuth();
-  const { savedArticleIds, toggleSave, isArticleSaved, isConfigured } = useSavedArticles();
-  const { preferences, updatePreferences } = usePreferences();
-  const { userInterests, refreshInterests } = useInterests();
+  const { savedArticleIds, toggleSave, isArticleSaved, isConfigured, loading: savedLoading, error: savedError } = useSavedArticles();
+  const { preferences, updatePreferences, loading: prefsLoading, error: prefsError } = usePreferences();
+  const { userInterests, refreshInterests, loading: interestsLoading, error: interestsError } = useInterests();
 
   const [currentScreen, setCurrentScreen] = useState<Screen>(() => {
     if (localStorage.getItem('onboarding_completed') === 'true') {
@@ -33,6 +33,24 @@ const AppContent: React.FC = () => {
   const [articles, setArticles] = useState<Article[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [autoPlay, setAutoPlay] = useState(false);
+
+  // Debug logging
+  useEffect(() => {
+    console.log('[App] State:', {
+      user: !!user,
+      authLoading,
+      savedLoading,
+      prefsLoading,
+      interestsLoading,
+      currentScreen,
+      articlesCount: articles.length,
+      interestsCount: userInterests.length
+    });
+
+    if (savedError) console.error('[App] Saved articles error:', savedError);
+    if (prefsError) console.error('[App] Preferences error:', prefsError);
+    if (interestsError) console.error('[App] Interests error:', interestsError);
+  }, [user, authLoading, savedLoading, prefsLoading, interestsLoading, currentScreen, savedError, prefsError, interestsError, articles.length, userInterests.length]);
 
   // Initial redirect if logged in
   useEffect(() => {
@@ -92,10 +110,14 @@ const AppContent: React.FC = () => {
     navigate('topic');
   };
 
-  if (authLoading) {
+  // Show loading screen while auth or user-dependent hooks are initializing
+  const isInitializing = authLoading || (user && (savedLoading || prefsLoading || interestsLoading));
+
+  if (isInitializing) {
     return (
-      <div className="min-h-screen w-full flex justify-center items-center bg-[#f0f2f5] dark:bg-black text-primary dark:text-white">
+      <div className="min-h-screen w-full flex flex-col justify-center items-center gap-4 bg-[#f0f2f5] dark:bg-black text-primary dark:text-white">
         <span className="animate-spin material-symbols-outlined text-4xl">sync</span>
+        <p className="text-sm text-primary/60 dark:text-white/60">Loading your personalized feed...</p>
       </div>
     );
   }
