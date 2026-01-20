@@ -61,20 +61,36 @@ export const fetchNews = async (): Promise<Article[]> => {
                         }
                     }
 
-                    // Optimize BBC image URLs for higher resolution
+                    // Optimize BBC image URLs for higher resolution with better fallback
                     if (imageUrl && (imageUrl.includes('bbci.co.uk') || imageUrl.includes('bbc.co.uk'))) {
-                        // BBC standard sizes: 240, 464, 624, 800, 976 (width)
-                        // Request 976x549 which is reliably available on BBC CDN
-                        imageUrl = imageUrl
-                            .replace(/_\d+x\d+\./g, '_976x549.')    // Use 976x549 (16:9 HD-ready)
-                            .replace(/_\d+x\d+$/g, '_976x549')      // Handle URLs without extension
-                            .replace(/_\d+\./, '_976.')             // Handle width-only format
-                            .replace('/cpsprodpb/', '/cpsproduction/') // Use production servers
-                            .replace('$recipe', '$recipe_976x549');  // BBC recipe parameter
+                        try {
+                            // BBC uses various URL patterns, handle them all
+                            if (imageUrl.includes('ichef.bbci.co.uk')) {
+                                // Pattern 1: ichef URLs with dimensions
+                                imageUrl = imageUrl
+                                    .replace(/_\d+x\d+\./g, '_976x549.')
+                                    .replace(/_\d+x\d+$/g, '_976x549');
+                            } else if (imageUrl.includes('$recipe')) {
+                                // Pattern 2: BBC recipe parameter
+                                imageUrl = imageUrl.replace(/\$recipe[^/]*/g, '$recipe_976x549');
+                            } else if (imageUrl.match(/\/\d+\/cpsprodpb\//)) {
+                                // Pattern 3: Production bucket URLs
+                                imageUrl = imageUrl
+                                    .replace('/cpsprodpb/', '/cpsproduction/')
+                                    .replace(/\/\d+x\d+\//g, '/976x549/');
+                            }
+
+                            // Ensure HTTPS for all BBC images
+                            if (imageUrl.startsWith('http:')) {
+                                imageUrl = imageUrl.replace('http:', 'https:');
+                            }
+                        } catch (err) {
+                            console.warn('BBC image URL optimization failed', err);
+                        }
                     }
 
                     // Use fallback images if no image found
-                    if (!imageUrl) {
+                    if (!imageUrl || imageUrl.trim() === '') {
                         imageUrl = FALLBACK_IMAGES[index % FALLBACK_IMAGES.length];
                     }
 

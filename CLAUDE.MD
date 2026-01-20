@@ -254,6 +254,13 @@ export const RSS_FEEDS = [
 
 ## Recent Updates
 
+### January 20, 2026
+- **Fixed blank screen after login** - App now properly waits for all hooks to load before rendering
+- **Completely redesigned AI Daily Brief** - Beautiful gradient design with detailed summaries, keyword extraction, top articles preview, and expandable categories
+- **Fixed image loading issues** - Better error handling with automatic fallbacks, improved BBC URL optimization
+- **Completely rewrote Explore tab** - Real-time search with results, trending topics with article previews, category browser with visual tiles, popular articles section, search history
+
+### Previous Updates
 - Added daily AI-generated summary of latest headlines
 - Improved BBC image resolution (976x549)
 - Enhanced Explore tab trending logic

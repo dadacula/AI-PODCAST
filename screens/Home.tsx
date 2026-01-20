@@ -147,6 +147,14 @@ const Home: React.FC<HomeProps> = ({
                     alt={article.title}
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     loading="lazy"
+                    onError={(e) => {
+                      const target = e.currentTarget;
+                      if (!target.dataset.fallbackAttempted) {
+                        target.dataset.fallbackAttempted = 'true';
+                        // Use a fallback image from Google
+                        target.src = 'https://lh3.googleusercontent.com/aida-public/AB6AXuCWBtb4b8GJXGRkAyAKYSLg8padcTFx41kIuvb-4qCogDGVgwB410EiiAKF0HdJ7i0WBIVPDH0LtU67htw6iOA3zKuFj71VKmyCe7BBnYbgPCaPGk4pBUTWnEdXZxMJxAH70r9wiwkNg5feUENRlhBLrtsR-A-Gb1LVX2r_Y5zRtJFWBmj5vfSe846kcvuhtUZwKhXiCOff3SmcjbVg3HFA5AD3gU0CJdqWlhdzvssvkBOXqizvmHSRt5g9vuEyf2sqMuzhz3HXdOg=w1200';
+                      }
+                    }}
                   />
                   <div className="absolute top-4 left-4 flex flex-col gap-2">
                     <span className="px-2.5 py-1 bg-surface-light/90 dark:bg-black/60 backdrop-blur-md text-accent-gold text-[10px] font-bold tracking-widest uppercase rounded font-sans border border-accent-gold/20">
@@ -250,6 +258,13 @@ const Home: React.FC<HomeProps> = ({
                     alt={article.title}
                     className="w-full h-full object-cover"
                     loading="lazy"
+                    onError={(e) => {
+                      const target = e.currentTarget;
+                      if (!target.dataset.fallbackAttempted) {
+                        target.dataset.fallbackAttempted = 'true';
+                        target.src = 'https://lh3.googleusercontent.com/aida-public/AB6AXuCWBtb4b8GJXGRkAyAKYSLg8padcTFx41kIuvb-4qCogDGVgwB410EiiAKF0HdJ7i0WBIVPDH0LtU67htw6iOA3zKuFj71VKmyCe7BBnYbgPCaPGk4pBUTWnEdXZxMJxAH70r9wiwkNg5feUENRlhBLrtsR-A-Gb1LVX2r_Y5zRtJFWBmj5vfSe846kcvuhtUZwKhXiCOff3SmcjbVg3HFA5AD3gU0CJdqWlhdzvssvkBOXqizvmHSRt5g9vuEyf2sqMuzhz3HXdOg=w1200';
+                      }
+                    }}
                   />
                 </div>
               </div>
