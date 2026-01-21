@@ -160,6 +160,7 @@ const AppContent: React.FC = () => {
           <Explore
             navigate={navigate}
             onTopicClick={handleTopicClick}
+            onArticleClick={handleArticleClick}
             articles={articles.filter(a => userInterests.length === 0 || userInterests.includes(a.category))}
           />
         )}

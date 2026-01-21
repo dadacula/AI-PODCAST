@@ -5,6 +5,7 @@ import BottomNav from '../components/BottomNav';
 interface ExploreProps {
   navigate: (screen: Screen) => void;
   onTopicClick: (topic: string) => void;
+  onArticleClick?: (article: Article) => void;
   articles: Article[];
 }
 
@@ -17,7 +18,7 @@ interface CategoryInfo {
   articleCount: number;
 }
 
-const Explore: React.FC<ExploreProps> = ({ navigate, onTopicClick, articles }) => {
+const Explore: React.FC<ExploreProps> = ({ navigate, onTopicClick, onArticleClick, articles }) => {
   const [query, setQuery] = useState('');
   const [searchHistory, setSearchHistory] = useState<string[]>(() => {
     try {
@@ -199,6 +200,7 @@ const Explore: React.FC<ExploreProps> = ({ navigate, onTopicClick, articles }) =
               {searchResults.map((article) => (
                 <div
                   key={article.id}
+                  onClick={() => onArticleClick?.(article)}
                   className="p-3 rounded-lg hover:bg-primary/5 dark:hover:bg-white/5 transition-colors cursor-pointer group"
                 >
                   <div className="flex gap-3">
@@ -358,6 +360,7 @@ const Explore: React.FC<ExploreProps> = ({ navigate, onTopicClick, articles }) =
               {popularArticles.map((article, idx) => (
                 <div
                   key={article.id}
+                  onClick={() => onArticleClick?.(article)}
                   className="bg-white dark:bg-surface-dark rounded-xl p-4 border border-primary/5 dark:border-white/5 hover:border-indigo-500/30 dark:hover:border-indigo-400/30 transition-all duration-300 hover:shadow-lg cursor-pointer group"
                 >
                   <div className="flex gap-3">
