@@ -28,6 +28,22 @@ try {
 } catch (err) {
     console.error("Critical: Failed to initialize Supabase client", err);
     // Create a dummy client that fails gracefully
+    // This chainable query builder makes all query chains return a Promise
+    const createQueryBuilder = () => {
+        const queryResult = Promise.resolve({ data: null, error: null });
+        const chainable: any = {
+            select: () => chainable,
+            eq: () => chainable,
+            order: () => chainable,
+            single: () => queryResult,
+            // Make the chainable itself awaitable
+            then: queryResult.then.bind(queryResult),
+            catch: queryResult.catch.bind(queryResult),
+            finally: queryResult.finally.bind(queryResult)
+        };
+        return chainable;
+    };
+
     supabaseInstance = {
         auth: {
             getSession: async () => ({ data: { session: null }, error: null }),
@@ -37,9 +53,9 @@ try {
             signOut: async () => { }
         },
         from: () => ({
-            select: () => ({ eq: () => ({ order: () => ({ single: () => Promise.resolve({ data: null, error: null }) }), single: () => Promise.resolve({ data: null, error: null }) }) }),
+            select: () => createQueryBuilder(),
             insert: () => Promise.resolve({ error: null }),
-            delete: () => ({ eq: () => ({ eq: () => Promise.resolve({ error: null }) }) }),
+            delete: () => createQueryBuilder(),
             upsert: () => Promise.resolve({ error: null })
         })
     };
