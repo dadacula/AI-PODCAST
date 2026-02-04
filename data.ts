@@ -1,36 +1,28 @@
 import { Article, Interest, TrendingTopic } from './types';
 
-// Curated selection of 16 high-quality, fast-loading tech blogs
+// Curated selection of 8 fast, reliable tech blogs for quick loading
 export const RSS_FEEDS = [
   // AI & Machine Learning
   { url: 'https://simonwillison.net/atom/everything/', category: 'AI & ML' },
-  { url: 'https://garymarcus.substack.com/feed', category: 'AI & ML' },
 
-  // Security & Privacy
+  // Security
   { url: 'https://krebsonsecurity.com/feed/', category: 'Security' },
-  { url: 'https://www.troyhunt.com/rss/', category: 'Security' },
 
-  // Programming & Development
+  // Programming
   { url: 'https://matklad.github.io/feed.xml', category: 'Programming' },
   { url: 'https://mitchellh.com/feed.xml', category: 'Programming' },
-  { url: 'https://eli.thegreenplace.net/feeds/all.atom.xml', category: 'Programming' },
 
   // Web Development
   { url: 'https://overreacted.io/rss.xml', category: 'Web Dev' },
-  { url: 'https://blog.jim-nielsen.com/feed.xml', category: 'Web Dev' },
 
-  // System Design & Hardware
-  { url: 'https://rachelbythebay.com/w/atom.xml', category: 'Systems' },
+  // Hardware
   { url: 'https://www.righto.com/feeds/posts/default', category: 'Hardware' },
-  { url: 'https://fabiensanglard.net/rss.xml', category: 'Hardware' },
 
   // Business & Science
   { url: 'https://www.construction-physics.com/feed', category: 'Business' },
-  { url: 'https://dynomight.net/feed.xml', category: 'Science' },
 
-  // Tech Culture & Commentary
+  // Tech Culture
   { url: 'https://daringfireball.net/feeds/main', category: 'Tech Culture' },
-  { url: 'https://pluralistic.net/feed/', category: 'Tech Culture' },
 ];
 
 const FALLBACK_IMAGES = [
@@ -49,8 +41,14 @@ export const fetchNews = async (): Promise<Article[]> => {
     try {
         const promises = feedsToFetch.map(async (feed) => {
             try {
-                // BBC English feeds might redirect, corsproxy handles it well
-                const response = await fetch(`${proxyUrl}${encodeURIComponent(feed.url)}`);
+                // Timeout after 5 seconds to prevent slow feeds from blocking
+                const timeoutPromise = new Promise((_, reject) =>
+                    setTimeout(() => reject(new Error('Timeout')), 5000)
+                );
+
+                const fetchPromise = fetch(`${proxyUrl}${encodeURIComponent(feed.url)}`);
+                const response = await Promise.race([fetchPromise, timeoutPromise]) as Response;
+
                 if (!response.ok) throw new Error('Network response was not ok');
                 const text = await response.text();
                 
