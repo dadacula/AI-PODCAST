@@ -118,14 +118,50 @@ export const fetchNews = async (): Promise<Article[]> => {
                 
                 const parser = new DOMParser();
                 const xml = parser.parseFromString(text, "text/xml");
-                const items = xml.querySelectorAll("item");
-                
+
+                // Support both RSS (item) and Atom (entry) feeds
+                let items = xml.querySelectorAll("item");
+                const isAtom = items.length === 0;
+                if (isAtom) {
+                    items = xml.querySelectorAll("entry");
+                }
+
                 return Array.from(items).map((item, index) => {
                     const title = item.querySelector("title")?.textContent || "No Title";
-                    const description = item.querySelector("description")?.textContent || "";
-                    const link = item.querySelector("link")?.textContent || "";
-                    const pubDate = item.querySelector("pubDate")?.textContent || new Date().toISOString();
-                    const guid = item.querySelector("guid")?.textContent || link;
+
+                    // Atom uses summary or content instead of description
+                    let description = "";
+                    if (isAtom) {
+                        description = item.querySelector("summary")?.textContent ||
+                                     item.querySelector("content")?.textContent || "";
+                    } else {
+                        description = item.querySelector("description")?.textContent || "";
+                    }
+
+                    // Atom link is an attribute, RSS link is text content
+                    let link = "";
+                    if (isAtom) {
+                        const linkEl = item.querySelector("link[rel='alternate'], link:not([rel])");
+                        link = linkEl?.getAttribute("href") || "";
+                    } else {
+                        link = item.querySelector("link")?.textContent || "";
+                    }
+
+                    // Atom uses updated/published, RSS uses pubDate
+                    let pubDate = "";
+                    if (isAtom) {
+                        pubDate = item.querySelector("published")?.textContent ||
+                                 item.querySelector("updated")?.textContent ||
+                                 new Date().toISOString();
+                    } else {
+                        pubDate = item.querySelector("pubDate")?.textContent || new Date().toISOString();
+                    }
+
+                    // Atom uses id, RSS uses guid
+                    const guid = isAtom ?
+                        (item.querySelector("id")?.textContent || link) :
+                        (item.querySelector("guid")?.textContent || link);
+
                     const timestamp = new Date(pubDate).getTime();
                     
                     let imageUrl = '';
@@ -195,10 +231,24 @@ export const fetchNews = async (): Promise<Article[]> => {
                             : `${imageUrl}=w1200`;
                     }
 
+                    // Extract source name from feed URL
+                    let sourceName = 'Tech Blog';
+                    try {
+                        const urlObj = new URL(feed.url);
+                        // Remove www. and common subdomains, capitalize first letter
+                        sourceName = urlObj.hostname
+                            .replace(/^(www\.|blog\.|feeds\.)/, '')
+                            .split('.')[0]
+                            .charAt(0).toUpperCase() +
+                            urlObj.hostname.replace(/^(www\.|blog\.|feeds\.)/, '').split('.')[0].slice(1);
+                    } catch (e) {
+                        console.warn('Failed to parse source from URL', feed.url);
+                    }
+
                     return {
                         id: guid,
                         category: feed.category,
-                        source: 'BBC News',
+                        source: sourceName,
                         title: title,
                         readTime: readTime,
                         listenTime: listenTime,
