@@ -1,98 +1,36 @@
 import { Article, Interest, TrendingTopic } from './types';
 
-// BBC RSS feeds are blocked by network restrictions (403 host_not_allowed)
-// Using curated tech blogs from HN Popular Blogs 2025 instead
+// Curated selection of 16 high-quality, fast-loading tech blogs
 export const RSS_FEEDS = [
   // AI & Machine Learning
-  { url: 'https://garymarcus.substack.com/feed', category: 'AI & ML' },
   { url: 'https://simonwillison.net/atom/everything/', category: 'AI & ML' },
-  { url: 'https://minimaxir.com/index.xml', category: 'AI & ML' },
+  { url: 'https://garymarcus.substack.com/feed', category: 'AI & ML' },
 
   // Security & Privacy
   { url: 'https://krebsonsecurity.com/feed/', category: 'Security' },
-  { url: 'https://lcamtuf.substack.com/feed', category: 'Security' },
   { url: 'https://www.troyhunt.com/rss/', category: 'Security' },
-  { url: 'https://micahflee.com/feed/', category: 'Security' },
-  { url: 'https://mjg59.dreamwidth.org/data/rss', category: 'Security' },
 
   // Programming & Development
   { url: 'https://matklad.github.io/feed.xml', category: 'Programming' },
   { url: 'https://mitchellh.com/feed.xml', category: 'Programming' },
   { url: 'https://eli.thegreenplace.net/feeds/all.atom.xml', category: 'Programming' },
-  { url: 'https://bernsteinbear.com/feed.xml', category: 'Programming' },
-  { url: 'https://borretti.me/feed.xml', category: 'Programming' },
-  { url: 'https://jyn.dev/atom.xml', category: 'Programming' },
-  { url: 'https://beej.us/blog/rss.xml', category: 'Programming' },
 
   // Web Development
   { url: 'https://overreacted.io/rss.xml', category: 'Web Dev' },
   { url: 'https://blog.jim-nielsen.com/feed.xml', category: 'Web Dev' },
-  { url: 'https://www.geoffreylitt.com/feed.xml', category: 'Web Dev' },
-  { url: 'https://evanhahn.com/feed.xml', category: 'Web Dev' },
-  { url: 'https://blog.miguelgrinberg.com/feed', category: 'Web Dev' },
 
-  // System Design & Architecture
+  // System Design & Hardware
   { url: 'https://rachelbythebay.com/w/atom.xml', category: 'Systems' },
-  { url: 'https://lucumr.pocoo.org/feed.atom', category: 'Systems' },
-  { url: 'https://michael.stapelberg.ch/feed.xml', category: 'Systems' },
-  { url: 'https://berthub.eu/articles/index.xml', category: 'Systems' },
-  { url: 'https://utcc.utoronto.ca/~cks/space/blog/?atom', category: 'Systems' },
-
-  // Hardware & Electronics
   { url: 'https://www.righto.com/feeds/posts/default', category: 'Hardware' },
   { url: 'https://fabiensanglard.net/rss.xml', category: 'Hardware' },
-  { url: 'https://www.downtowndougbrown.com/feed/', category: 'Hardware' },
-  { url: 'https://www.jeffgeerling.com/blog.xml', category: 'Hardware' },
 
-  // Business & Startups
+  // Business & Science
   { url: 'https://www.construction-physics.com/feed', category: 'Business' },
-  { url: 'https://steveblank.com/feed/', category: 'Business' },
-  { url: 'https://www.dwarkeshpatel.com/feed', category: 'Business' },
-  { url: 'https://keygen.sh/blog/feed.xml', category: 'Business' },
-
-  // Science & Research
-  { url: 'https://www.johndcook.com/blog/feed/', category: 'Science' },
   { url: 'https://dynomight.net/feed.xml', category: 'Science' },
-  { url: 'https://www.experimental-history.com/feed', category: 'Science' },
-  { url: 'https://gwern.substack.com/feed', category: 'Science' },
 
-  // Technology Commentary & Culture
+  // Tech Culture & Commentary
   { url: 'https://daringfireball.net/feeds/main', category: 'Tech Culture' },
   { url: 'https://pluralistic.net/feed/', category: 'Tech Culture' },
-  { url: 'https://www.wheresyoured.at/rss/', category: 'Tech Culture' },
-  { url: 'https://anildash.com/feed.xml', category: 'Tech Culture' },
-  { url: 'https://joanwestenberg.com/rss', category: 'Tech Culture' },
-  { url: 'https://xeiaso.net/blog.rss', category: 'Tech Culture' },
-
-  // Retro Computing & Digital History
-  { url: 'https://www.filfre.net/feed/', category: 'Digital History' },
-  { url: 'https://oldvcr.blogspot.com/feeds/posts/default', category: 'Digital History' },
-  { url: 'https://www.abortretry.fail/feed', category: 'Digital History' },
-  { url: 'https://computer.rip/rss.xml', category: 'Digital History' },
-  { url: 'https://dfarq.homeip.net/feed/', category: 'Digital History' },
-
-  // Microsoft & Windows Development
-  { url: 'https://devblogs.microsoft.com/oldnewthing/feed', category: 'Windows Dev' },
-
-  // General Tech & Programming Blogs
-  { url: 'https://www.seangoedecke.com/rss.xml', category: 'Technology' },
-  { url: 'https://shkspr.mobi/blog/feed/', category: 'Technology' },
-  { url: 'https://skyfall.dev/rss.xml', category: 'Technology' },
-  { url: 'https://nesbitt.io/feed.xml', category: 'Technology' },
-  { url: 'https://terriblesoftware.org/feed/', category: 'Technology' },
-  { url: 'https://gilesthomas.com/feed/rss.xml', category: 'Technology' },
-  { url: 'https://xania.org/feed', category: 'Technology' },
-  { url: 'https://susam.net/feed.xml', category: 'Technology' },
-  { url: 'https://entropicthoughts.com/feed.xml', category: 'Technology' },
-  { url: 'https://buttondown.com/hillelwayne/rss', category: 'Technology' },
-  { url: 'https://jayd.ml/feed.xml', category: 'Technology' },
-  { url: 'https://geohot.github.io/blog/feed.xml', category: 'Technology' },
-  { url: 'http://www.aaronsw.com/2002/feeds/pgessays.rss', category: 'Technology' },
-  { url: 'https://brutecat.com/rss.xml', category: 'Technology' },
-  { url: 'https://www.chiark.greenend.org.uk/~sgtatham/quasiblog/feed.xml', category: 'Technology' },
-  { url: 'https://feed.tedium.co/', category: 'Technology' },
-  { url: 'https://danielchasehooper.com/feed.xml', category: 'Technology' },
-  { url: 'https://martinalderson.com/feed.xml', category: 'Technology' },
 ];
 
 const FALLBACK_IMAGES = [
