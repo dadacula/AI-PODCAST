@@ -72,7 +72,7 @@ const Home: React.FC<HomeProps> = ({
   }
 
   const displayArticles = sortedArticles.length > 0 ? sortedArticles : [];
-  const isLive = articles.length > 0 && articles[0].source.includes('BBC');
+  const isLive = articles.length > 0; // Show live indicator when articles are loaded
 
   const heroArticles = displayArticles.slice(0, 5);
   const feedArticles = displayArticles.slice(5, 11);
@@ -104,7 +104,7 @@ const Home: React.FC<HomeProps> = ({
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
               </span>
-              <span className="text-[10px] font-bold text-primary dark:text-white font-sans uppercase">Live from BBC</span>
+              <span className="text-[10px] font-bold text-primary dark:text-white font-sans uppercase">Live Updates</span>
             </div>
           )}
         </div>
